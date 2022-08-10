@@ -21,6 +21,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 var ContractAddress = "0x7BB73B7fEC4fcCC8d39274a21a9C8a52EfDF3C73";
 
 app.get('/', function (req, res) {
+	res.render("home")
+})
+app.get('/old', function (req, res) {
 	res.render("index")
 })
 

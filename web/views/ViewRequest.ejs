@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="../public/css/bootstrap.min.css" type="text/css">
 <link rel="stylesheet" href="../public/css/style.css" type="text/css">
 <link rel="stylesheet" href="../public/css/sweet-alert.css" type="text/css">
-
+<script src="../public/js/web3.min.js"></script>
 
 <script>
 
@@ -20,9 +20,13 @@ window.addEventListener('load', async () => {
     if (window.ethereum) {
         window.web3 = new Web3(ethereum);
         try {
-            await ethereum.enable();
-			UserAddress=web3.eth.coinbase;
-			ViewDLRequestLength();
+                   window.web3 = new Web3(ethereum);
+                   window.web3 = new Web3(window.ethereum);
+                   window.ethereum.enable().then(function(acc){
+                   UserAddress = acc[0];
+			       ViewPRRequestLength();
+			                   });
+
         } catch (error) {
             alert("User denied account access...");
         }
@@ -30,29 +34,27 @@ window.addEventListener('load', async () => {
     else if (window.web3) {
         window.web3 = new Web3(web3.currentProvider);
 		UserAddress=web3.eth.coinbase;
-		ViewDLRequestLength();
+		ViewPRRequestLength();
     }
     else {
         alert('Non-Ethereum browser detected. You should consider trying MetaMask!');
     }
 });
 
-function ViewDLRequestLength()
+function ViewPRRequestLength()
 {
 	var ABIString = document.getElementById("hdnContractABI").value; 
 	ABIString = ABIString.replace(/'/g , "\"");
 	ABIJSON = JSON.parse(ABIString);
-	MyContract = web3.eth.contract(ABIJSON).at("<%=ContractAddress%>");
-	
-	MyContract.ViewDLRequestLength.call(UserAddress, function(error, result){
+	MyContract = new web3.eth.Contract(ABIJSON,"<%=ContractAddress%>");
+
+	MyContract.methods.ViewDLRequestLength(UserAddress).call({from:UserAddress}, function(error, result){
 		if(!error)
 		{
-
-			RequestLength=result.toNumber();
-			
+			RequestLength=parseInt(result);
 			(function loop(i) {
 				if (i < RequestLength) new Promise(resolve => {
-					ViewDLRequestHeader(i);
+					ViewPRRequestHeader(i);
 					setTimeout(resolve, 1000);
 				}).then(loop.bind(null, i+1));
 			})(0);
@@ -65,11 +67,11 @@ function ViewDLRequestLength()
 	})
 }
 
-function ViewDLRequestHeader(index)
+function ViewPRRequestHeader(index)
 {
 	requestlistparent = document.getElementById("requestlistparent");
-	
-	MyContract.ViewDLRequestHeader.call(UserAddress,index, function(error, result){
+	MyContract.methods.ViewDLRequestHeader(UserAddress,index).call({from:UserAddress}, function(error, result){
+	    console.log(result)
 		if(!error)
 		{
 			InstitutionName="";
@@ -77,7 +79,7 @@ function ViewDLRequestHeader(index)
 			ApprovalStatusText="";
 			
 			InstitutionName = result[0];
-			ApprovalStatus = result[1].toNumber(); 
+			ApprovalStatus = parseInt(result[1]);
 			
 			if(ApprovalStatus == "1")
 			{

@@ -51,7 +51,7 @@ function AddUser()
 // 			console.log(err)
 // 		}
 // 	});
-	MyContract.methods.AddUser(UserAddress,FullName,EmailID,MobileNo).send({from: '0xc00cA1140861acbc549b4D88ead4F04ee60B53B3'})
+	MyContract.methods.AddUser(UserAddress,FullName,EmailID,MobileNo).send({from: UserAddress})
 .on('transactionHash', function(hash){
     console.log(hash);
     location.href="/Message?TransHash="+hash

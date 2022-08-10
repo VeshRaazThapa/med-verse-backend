@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="../public/css/bootstrap.min.css" type="text/css">
 <link rel="stylesheet" href="../public/css/style.css" type="text/css">
 <link rel="stylesheet" href="../public/css/sweet-alert.css" type="text/css">
+<script src="../public/js/web3.min.js"></script>
 
 <script>
 
@@ -20,7 +21,9 @@ window.addEventListener('load', async () => {
         window.web3 = new Web3(ethereum);
         try {
             await ethereum.enable();
-			UserAddress=web3.eth.coinbase;
+            window.ethereum.enable().then(function(acc){
+            UserAddress = acc[0];
+            });
         } catch (error) {
             alert("User denied account access...");
         }
@@ -37,17 +40,18 @@ window.addEventListener('load', async () => {
 
 function AddUserDL()
 {
+    alert('calling the add user dl')
 	var ABIString = document.getElementById("hdnContractABI").value; 
 	ABIString = ABIString.replace(/'/g , "\"");
 	ABIJSON = JSON.parse(ABIString);
-	MyContract = web3.eth.contract(ABIJSON).at("<%=ContractAddress%>");
+	MyContract = new web3.eth.Contract(ABIJSON,"<%=ContractAddress%>");
 
 	var DL_No = document.getElementById("txtLicenceNo").value;
 	var DL_Name = document.getElementById("txtFullName").value;
 	var DL_DOB = document.getElementById("txtDOB").value;
 	var DL_Address = document.getElementById("txtAddress").value;
 	
-	MyContract.AddUserDL.sendTransaction(UserAddress,DL_No,DL_Name,DL_DOB,DL_Hash,DL_Address,function(err, transactionHash) {
+	MyContract.methods.AddUserDL(UserAddress,DL_No,DL_Name,DL_DOB,DL_Hash,DL_Address).send({from:UserAddress}).on('transactionHash',function(err, transactionHash) {
 		if(!err)
 		{
 			location.href="/Message?TransHash="+transactionHash;
@@ -66,20 +70,53 @@ function getDLHash()
 	const invoicefile = document.getElementById("invoicefile");
 	reader.readAsArrayBuffer(invoicefile.files[0]); // Read Provided File
 	  
-    reader.onloadend = function() {
-			const ipfs = window.IpfsApi('ipfs.infura.io', 5001, {protocol: 'https'}) // Connect to IPFS
+    reader.onloadend = async function() {
+
+           const projectId = '2DANzcuNNWsEI4GOHwbxZOwDrcw';
+           const projectSecret = '1a49d66db9af54ef01291cb5b748442c';
+
+
+			const ipfs = window.IpfsApi('2DANzcuNNWsEI4GOHwbxZOwDrcw:1a49d66db9af54ef01291cb5b748442c@ipfs.infura.io', 5001,{protocol: 'https'}) // Connect to IPFS
+			 const test =
+			 new Promise((resolve, reject) => {
+			 async () => {
+              try {
+                console.log(await ipfs.id());
+              } catch (error) {
+                console.log(error);
+              }
+            }
+            });
+
+            test();
 			const buf = buffer.Buffer(reader.result) // Convert data into buffer
-			
-			ipfs.files.add(buf)
+// 			ipfs.files.add(buf,(error, result) => {
+//
+//             console.log('Ipfs result', result)
+//             const reportHash = result[0].hash
+//
+//             if (error) {
+//                 console.error(error)
+//
+//             }
+//             })
+//              ipfs.id()
+//   .then((id) => {
+//     console.log('my id is: ', id)
+//   })
+//   .catch((err) => {
+//     console.log('Fail: ', err)
+//   })
+			 ipfs.files.add(buf)
 				.then(function (result) {
+					alert(result);
 					DL_Hash=result[0].hash;
-					//console.log(DLHash)
 					AddUserDL();
 				})
 				.catch(function(err) {
 					console.log('Fail: ', err)
 			})
-  
+//
     }
 }
 
@@ -172,8 +209,7 @@ function getDLHash()
 </footer>
 
 <script src="../public/js/buffer/buffer.js"></script>
-<script src="../public/js/ipfsapi/index.js" integrity="sha384-5bXRcW9kyxxnSMbOoHzraqa7Z0PQWIao+cgeg327zit1hz5LZCEbIMx/LWKPReuB" crossorigin="anonymous"></script>
-
+<script src="https://unpkg.com/ipfs-api@26.1.2/dist/index.js" integrity="sha256-3i/4TxHbpPddtLmXYGTLMb3RHG6f5Ljlp86DCX68OTg=" crossorigin="anonymous"></script>
 <script src="../public/js/jquery.js"></script>
 <script src="../public/js/bootstrap.min.js"></script>
 <script src="../public/js/sweet-alert.min.js"></script>

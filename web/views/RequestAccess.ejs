@@ -10,21 +10,27 @@
 <link rel="stylesheet" href="../public/css/style.css" type="text/css">
 <link rel="stylesheet" href="../public/css/sweet-alert.css" type="text/css">
 <link rel="stylesheet" href="../public/css/style_bank.css" type="text/css">
-
+<script src="../public/js/web3.min.js"></script>
 <script>
 
-var UserAddress="";
+// var UserAddress="0xc00cA1140861acbc549b4D88ead4F04ee60B53B3";
 
 window.addEventListener('load', async () => {
     if (window.ethereum) {
         window.web3 = new Web3(ethereum);
-        try {
-            await ethereum.enable();
-			UserAddress=web3.eth.coinbase;
-			document.getElementById("txtUserAddress").value=UserAddress;
-        } catch (error) {
-            alert("User denied account access...");
-        }
+        window.web3 = new Web3(window.ethereum);
+        window.ethereum.enable().then(function(acc){
+        UserAddress = acc[0];
+        document.getElementById("txtUserAddress").value=UserAddress;
+            });
+
+//         try {
+//             await ethereum.enable();
+// 			UserAddress=web3.eth.coinbase;
+// 			document.getElementById("txtUserAddress").value=UserAddress;
+//         } catch (error) {
+//             alert("User denied account access...");
+//         }
     }
     else if (window.web3) {
         window.web3 = new Web3(web3.currentProvider);
@@ -42,7 +48,7 @@ function AddDLRequest()
 	var ABIString = document.getElementById("hdnContractABI").value; 
 	ABIString = ABIString.replace(/'/g , "\"");
 	ABIJSON = JSON.parse(ABIString);
-	MyContract = web3.eth.contract(ABIJSON).at("<%=ContractAddress%>");
+	MyContract = new web3.eth.Contract(ABIJSON,"<%=ContractAddress%>");
 
 	var RequestedBy = document.getElementById("txtInstituteName").value; 
 	
@@ -78,19 +84,23 @@ function AddDLRequest()
 		DL_Address=1;
 	}
 	
-	MyContract.AddDLRequest.sendTransaction(UserAddress,RequestedBy,DL_No,DL_Name,DL_DOB,DL_Hash,DL_Address,DL_OverAll_Status,function(err, transactionHash) {
-		if(!err)
-		{
-			location.href="/Message?TransHash="+transactionHash;
-		}
-		else
-		{
-			console.log(err)
-		}
-	});
-
-}
-
+// 	MyContract.AddDLRequest.sendTransaction(UserAddress,RequestedBy,DL_No,DL_Name,DL_DOB,DL_Hash,DL_Address,DL_OverAll_Status,function(err, transactionHash) {
+// 		if(!err)
+// 		{
+// 			location.href="/Message?TransHash="+transactionHash;
+// 		}
+// 		else
+// 		{
+// 			console.log(err)
+// 		}
+// 	});
+//
+// }
+    MyContract.methods.AddDLRequest(UserAddress,RequestedBy,DL_No,DL_Name,DL_DOB,DL_Hash,DL_Address,DL_OverAll_Status).send({from: UserAddress}).on('transactionHash',function(hash) {
+        console.log(hash);
+        location.href="/Message?TransHash="+hash;
+    });
+    }
 
 </script>
 

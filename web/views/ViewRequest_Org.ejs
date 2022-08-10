@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="../public/css/style.css" type="text/css">
 <link rel="stylesheet" href="../public/css/sweet-alert.css" type="text/css">
 <link rel="stylesheet" href="../public/css/style_bank.css" type="text/css">
+<script src="../public/js/web3.min.js"></script>
 
 <script>
 
@@ -20,9 +21,14 @@ window.addEventListener('load', async () => {
     if (window.ethereum) {
         window.web3 = new Web3(ethereum);
         try {
-            await ethereum.enable();
-			UserAddress=web3.eth.coinbase;
-			ViewDLRequestLength();
+			 await ethereum.enable();
+            window.ethereum.enable().then(function(acc){
+        UserAddress = acc[0];
+        					ViewDLRequestLength();
+
+//         $("#accountAddress").html("Your Account: " + App.account);
+    });
+
         } catch (error) {
             alert("User denied account access...");
         }
@@ -43,12 +49,12 @@ function ViewDLRequestLength()
 	var ABIString = document.getElementById("hdnContractABI").value; 
 	ABIString = ABIString.replace(/'/g , "\"");
 	ABIJSON = JSON.parse(ABIString);
-	MyContract = web3.eth.contract(ABIJSON).at("<%=ContractAddress%>");
+	MyContract = new web3.eth.Contract(ABIJSON,"<%=ContractAddress%>");
 	
-	MyContract.ViewDLRequestLength.call(UserAddress, function(error, result){
+	MyContract.methods.ViewDLRequestLength(UserAddress).call({from:UserAddress}, function(error, result){
 		if(!error)
 		{
-			RequestLength=result.toNumber();
+			RequestLength=parseInt(result);
 			
 			(function loop(i) {
 				if (i < RequestLength) new Promise(resolve => {
@@ -69,7 +75,7 @@ function ViewDLRequestHeader(index)
 {
 	requestlistparent = document.getElementById("requestlistparent");
 	
-	MyContract.ViewDLRequestHeader.call(UserAddress,index, function(error, result){
+	MyContract.methods.ViewDLRequestHeader(UserAddress,index).call({from:UserAddress}, function(error, result){
 		if(!error)
 		{
 			InstitutionName="";
@@ -77,7 +83,7 @@ function ViewDLRequestHeader(index)
 			ApprovalStatusText="";
 			
 			InstitutionName = result[0];
-			ApprovalStatus = result[1].toNumber();
+			ApprovalStatus = parseInt(result[1]);
 			
 			if(ApprovalStatus == "1")
 			{

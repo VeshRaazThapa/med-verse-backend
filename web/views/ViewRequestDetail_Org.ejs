@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="../public/css/style.css" type="text/css">
 <link rel="stylesheet" href="../public/css/sweet-alert.css" type="text/css">
 <link rel="stylesheet" href="../public/css/style_bank.css" type="text/css">
+<script src="../public/js/web3.min.js"></script>
 
 <script>
 
@@ -26,9 +27,14 @@ window.addEventListener('load', async () => {
     if (window.ethereum) {
         window.web3 = new Web3(ethereum);
         try {
-            await ethereum.enable();
-			UserAddress=web3.eth.coinbase;
-			viewUserDL();
+        			 await ethereum.enable();
+             window.ethereum.enable().then(function(acc){
+        UserAddress = acc[0];
+        console.log(UserAddress);
+        viewUserDL();
+
+//         $("#accountAddress").html("Your Account: " + App.account);
+    });
         } catch (error) {
             alert("User denied account access...");
         }
@@ -48,28 +54,29 @@ function viewUserDL()
 	var ABIString = document.getElementById("hdnContractABI").value; 
 	ABIString = ABIString.replace(/'/g , "\"");
 	ABIJSON = JSON.parse(ABIString);
-	MyContract = web3.eth.contract(ABIJSON).at("<%=ContractAddress%>");
+	MyContract = new web3.eth.Contract(ABIJSON,"<%=ContractAddress%>");
 	
 	requestlistchild = document.getElementById("requestlistchild");
 	
-	MyContract.viewUserDL.call(UserAddress, <%=RequestIndex%>, function(error, result){
+	MyContract.methods.viewUserDL(UserAddress, <%=RequestIndex%>).call({from:UserAddress}, function(error, result){
+	    alert(result)
 		if(!error)
 		{
 			//console.log(result);
 			
-			DL_No = result[0].toNumber();
+			DL_No = parseInt(result[0]);
 			DL_No_Value = result[1];
 			
-			DL_Name = result[2].toNumber();
+			DL_Name = parseInt(result[2]);
 			DL_Name_Value = result[3];
 			
-			DL_DOB = result[4].toNumber();
+			DL_DOB = parseInt(result[4]);
 			DL_DOB_Value = result[5];
 			
-			DL_Hash = result[6].toNumber();
+			DL_Hash = parseInt(result[6]);
 			DL_Hash_Value = result[7];
 			
-			DL_Address = result[8].toNumber(); 
+			DL_Address = parseInt(result[8]);
 			DL_Address_Value = result[9]; 
 
 		

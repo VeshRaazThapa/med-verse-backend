@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="../public/css/bootstrap.min.css" type="text/css">
 <link rel="stylesheet" href="../public/css/style.css" type="text/css">
 <link rel="stylesheet" href="../public/css/sweet-alert.css" type="text/css">
+<script src="../public/js/web3.min.js"></script>
 
 <script>
 
@@ -24,10 +25,15 @@ var DL_Address = 0;
 window.addEventListener('load', async () => {
     if (window.ethereum) {
         window.web3 = new Web3(ethereum);
+
         try {
             await ethereum.enable();
-			UserAddress=web3.eth.coinbase;
-			ViewDLRequestDetail();
+            window.ethereum.enable().then(function(acc){
+        UserAddress = acc[0];
+        console.log(UserAddress);
+        			ViewDLRequestDetail();
+//         $("#accountAddress").html("Your Account: " + App.account);
+    });
         } catch (error) {
             alert("User denied account access...");
         }
@@ -47,20 +53,20 @@ function ViewDLRequestDetail()
 	var ABIString = document.getElementById("hdnContractABI").value; 
 	ABIString = ABIString.replace(/'/g , "\"");
 	ABIJSON = JSON.parse(ABIString);
-	MyContract = web3.eth.contract(ABIJSON).at("<%=ContractAddress%>");
+	MyContract = new web3.eth.Contract(ABIJSON,"<%=ContractAddress%>");
 	
 	requestlistchild = document.getElementById("requestlistchild");
 	
-	MyContract.ViewDLRequestDetail.call(UserAddress, <%=RequestIndex%>, function(error, result){
+	MyContract.methods.ViewDLRequestDetail(UserAddress, <%=RequestIndex%>).call({from:UserAddress}, function(error, result){
 		if(!error)
 		{
 			//console.log(result);
 			
-			DL_No = result[1].toNumber();
-			DL_Name = result[2].toNumber();
-			DL_DOB = result[3].toNumber();
-			DL_Hash = result[4].toNumber();
-			DL_Address = result[5].toNumber(); 
+			DL_No = parseInt(result[1]);
+			DL_Name = parseInt(result[2]);
+			DL_DOB = parseInt(result[3]);
+			DL_Hash = parseInt(result[4]);
+			DL_Address = parseInt(result[5]);
 
 			/*
 			console.log("DL_No - "+DL_No);
@@ -113,7 +119,7 @@ function UpdateRequestStatus()
 	var ABIString = document.getElementById("hdnContractABI").value; 
 	ABIString = ABIString.replace(/'/g , "\"");
 	ABIJSON = JSON.parse(ABIString);
-	MyContract = web3.eth.contract(ABIJSON).at("<%=ContractAddress%>");
+	MyContract = new web3.eth.Contract(ABIJSON,"<%=ContractAddress%>");
 
 	var AccessReqCount=0;
 	var AccessPerCount=0;
@@ -214,7 +220,7 @@ function UpdateRequestStatus()
 	return false;
 */
 	
-	MyContract.UpdateRequestStatus.sendTransaction(UserAddress,<%=RequestIndex%>,DL_No,DL_Name,DL_DOB,DL_Hash,DL_Address,DL_OverAll_Status,function(err, transactionHash) {
+	MyContract.methods.UpdateRequestStatus(UserAddress,<%=RequestIndex%>,DL_No,DL_Name,DL_DOB,DL_Hash,DL_Address,DL_OverAll_Status).send({from: UserAddress}).on('transactionHash',function(err, transactionHash) {
 		if(!err)
 		{
 			location.href="/Message?TransHash="+transactionHash;

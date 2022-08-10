@@ -2,8 +2,8 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var Web3 = require('web3');
 var path = require('path');
-
 var app = express();
+app.locals.ipfsClient = require('ipfs-http-client');;
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'web/views'));
 app.use('/public', express.static(__dirname + '/web/public'));

@@ -1,9 +1,17 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var Web3 = require('web3');
+var fileUpload = require('express-fileupload');
+const fs = require('fs');
 var path = require('path');
 var app = express();
-app.locals.ipfsClient = require('ipfs-http-client');;
+const projectId = '2DANzcuNNWsEI4GOHwbxZOwDrcw';
+const projectSecret = '1a49d66db9af54ef01291cb5b748442c';
+const auth =
+    'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64');
+const ipfsClient = require('ipfs-http-client');
+const ipfs = new ipfsClient({host:'ipfs.infura.io',port:'5001',protocol:'https', headers: {
+        authorization: auth,
+    },});
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'web/views'));
 app.use('/public', express.static(__dirname + '/web/public'));
@@ -15,7 +23,8 @@ app.use(function(req, res, next) {
 });
 
 app.use(bodyParser.json()); // support json encoded bodies
-app.use(bodyParser.urlencoded({ extended: true })); 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(fileUpload());
 
 // Deploy Smart Contract and place smart contract address here 
 var ContractAddress = "0x7BB73B7fEC4fcCC8d39274a21a9C8a52EfDF3C73";
@@ -36,6 +45,35 @@ app.get('/AddUserDL', function (req, res) {
 	var data = {ContractAddress:ContractAddress};
 	res.render("AddUserDL",data);
 })
+
+app.post('/upload', function (req,res) {
+	const file = req.files.invoicefile;
+	console.log(req);
+	const fileName = req.files.invoicefile.name;
+	const filePath = '/Users/stuff/Desktop/Research/' + fileName;
+
+	file.mv(filePath,async (err) => {
+		if (err) {
+			console.log('Error: failed to download the file');
+			return res.status(500).send(err);
+		}
+
+		const fileHash = await addFile(fileName,filePath);
+
+		fs.unlink(filePath, (err) => {
+			if (err) console.log(err);
+		});
+		res.render('upload',{fileName,fileHash});
+
+	});
+	});
+
+const addFile = async (fileName, filePath) => {
+	const file = fs.readFileSync(filePath);
+	const fileAdded = await ipfs.add({path: fileName,content:file});
+	// const fileHash = fileAdded[0].hash;
+	return fileAdded[0].hash;
+}
 
 app.get('/ViewRequest', function (req, res) {
 	var data = {ContractAddress:ContractAddress};

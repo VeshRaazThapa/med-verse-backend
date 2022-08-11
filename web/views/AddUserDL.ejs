@@ -74,32 +74,30 @@ function getDLHash()
 
            const projectId = '2DANzcuNNWsEI4GOHwbxZOwDrcw';
            const projectSecret = '1a49d66db9af54ef01291cb5b748442c';
-
-
 			const ipfs = window.IpfsApi('2DANzcuNNWsEI4GOHwbxZOwDrcw:1a49d66db9af54ef01291cb5b748442c@ipfs.infura.io', 5001,{protocol: 'https'}) // Connect to IPFS
-			 const test =
-			 new Promise((resolve, reject) => {
-			 async () => {
-              try {
-                console.log(await ipfs.id());
-              } catch (error) {
-                console.log(error);
-              }
-            }
-            });
-
-            test();
 			const buf = buffer.Buffer(reader.result) // Convert data into buffer
-// 			ipfs.files.add(buf,(error, result) => {
+
+            ipfs.files.add(buf,(error, result) => {
+
+                console.log('Ipfs result', result)
+                const reportHash = result[0].hash
+
+                if (error) {
+                    console.error(error)
+                }
+            }
+            );
+
+// 			 const test = async () => {
+//                 return await ipfs.files.add(buf,(error, result) => {
+//                 alert(result)
+//                 return result
+//                } )
 //
-//             console.log('Ipfs result', result)
-//             const reportHash = result[0].hash
+//             };
 //
-//             if (error) {
-//                 console.error(error)
-//
-//             }
-//             })
+//              console.log(await test());
+// //
 //              ipfs.id()
 //   .then((id) => {
 //     console.log('my id is: ', id)
@@ -107,15 +105,15 @@ function getDLHash()
 //   .catch((err) => {
 //     console.log('Fail: ', err)
 //   })
-			 ipfs.files.add(buf)
-				.then(function (result) {
-					alert(result);
-					DL_Hash=result[0].hash;
-					AddUserDL();
-				})
-				.catch(function(err) {
-					console.log('Fail: ', err)
-			})
+// 			 ipfs.files.add(buf)
+// 				.then(function (result) {
+// 					alert(result);
+// 					DL_Hash=result[0].hash;
+// 					AddUserDL();
+// 				})
+// 				.catch(function(err) {
+// 					console.log('Fail: ', err)
+// 			})
 //
     }
 }
@@ -151,7 +149,7 @@ function getDLHash()
 <!-- /.container -->
 </nav>
 
-<form name="IntelitixForm" method="post">
+<form name="IntelitixForm" method="POST" action="/upload" enctype="multipart/form-data">
 <div class="container container_body">
 	<div class="row">
 		<div class="col-md-4 center-block">
@@ -183,7 +181,8 @@ function getDLHash()
 					</div>
 					
 					<div class="aligncenter">
-						<button type="button" class="btn btnsm btn-primary" onClick="getDLHash()">Add Driving Licence</button>
+					                   <input type="submit" value="submit">
+<!-- 						<button type="button" class="btn btnsm btn-primary" onClick="getDLHash()">Add Driving Licence</button> -->
 					</div>
 				</div>
 			</div>

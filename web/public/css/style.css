@@ -1322,3 +1322,52 @@ textarea.error {
     margin-top: 30px;
   }
 }
+
+/* Additional CSS */
+
+.doc-profile {
+  color: #fff;
+  display: flex;
+}
+
+.doc-image {
+  position: relative;
+  display: inline-block;
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  background-color: #fff;
+  /* margin-right: 8px !important; */
+  top: 8px;
+  overflow: hidden;
+}
+
+.doc-image img {
+  /* margin-left: -5px;
+  margin-top: -5px; */
+
+  height: 100%;
+  width: 100%;
+  transform: scale(1.1);
+}
+
+.doc-name {
+  position: relative;
+  font-weight: bold;
+  display: inline-block;
+  font-size: 14px !important;
+  font-family: sans-serif;
+  top: -3px;
+}
+
+.doc-name a {
+  color: #fff;
+}
+
+.doc-name a:hover {
+  text-decoration: none;
+}
+
+.patient-profile img {
+  height: 130%;
+}

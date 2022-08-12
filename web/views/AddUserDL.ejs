@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
-<title>1ID</title>
+<title>Patient Report | MedVerse</title>
 <link rel="stylesheet" href="../public/css/bootstrap.min.css" type="text/css">
 <link rel="stylesheet" href="../public/css/style.css" type="text/css">
 <link rel="stylesheet" href="../public/css/sweet-alert.css" type="text/css">
@@ -50,7 +50,6 @@ function AddUserDL()
 	var DL_Name = document.getElementById("txtFullName").value;
 	var DL_DOB = document.getElementById("txtDOB").value;
 	var DL_Address = document.getElementById("txtAddress").value;
-	
 	MyContract.methods.AddUserDL(UserAddress,DL_No,DL_Name,DL_DOB,DL_Hash,DL_Address).send({from:UserAddress}).on('transactionHash',function(err, transactionHash) {
 		if(!err)
 		{
@@ -69,7 +68,7 @@ function getDLHash()
 	const reader = new FileReader();
 	const invoicefile = document.getElementById("invoicefile");
 	reader.readAsArrayBuffer(invoicefile.files[0]); // Read Provided File
-	  
+
     reader.onloadend = async function() {
 
            const projectId = '2DANzcuNNWsEI4GOHwbxZOwDrcw';
@@ -155,31 +154,31 @@ function getDLHash()
 		<div class="col-md-4 center-block">
 			<div class="panel panel-info">
 				<div class="panel-heading">
-					<h3 class="panel-title">Add Driving Licence Details</h3>
+					<h3 class="panel-title">Add Patient Report Details</h3>
 				</div>
 				<div class="panel-body">
 
 					<div class="form-group">
-						<label class="control-label" for="txtLicenceNo">Driving Licence No.</label>
-						<input class="form-control" name="txtLicenceNo" id="txtLicenceNo" type="text" value="" placeholder="Licence No.">
+						<label class="control-label" for="txtLicenceNo">Registration No.</label>
+						<input class="form-control" name="txtLicenceNo" id="txtLicenceNo" type="text" value="" placeholder="Registration No.">
 					</div>
 					<div class="form-group">
-						<label class="control-label" for="txtFullName">Name as per Driving Licence</label>
+						<label class="control-label" for="txtFullName">Report Name</label>
 						<input class="form-control" name="txtFullName" id="txtFullName" type="text" value="" placeholder="Name">
 					</div>
 					<div class="form-group">
-						<label class="control-label" for="txtDOB">DOB as per Driving Licence</label>
+						<label class="control-label" for="txtDOB">Entry Date</label>
 						<input class="form-control" name="txtDOB" id="txtDOB" type="text" value="" placeholder="DD/MM/YYYY">
 					</div>
 					<div class="form-group">
-						<label class="control-label" for="txtAddress">Address as per Driving Licence</label>
-						<textarea class="form-control" rows="4" name="txtAddress" id="txtAddress" placeholder="Address here ..."></textarea>
+						<label class="control-label" for="txtAddress">Lab Name </label>
+						<textarea class="form-control" rows="4" name="txtAddress" id="txtAddress" placeholder="Lab Name here ..."></textarea>
 					</div>
 					<div class="form-group">
 						<label class="control-label" for="txtFinanceAmount">Attach Lab Report</label>
 						<input type="file" name="invoicefile" id="invoicefile">
 					</div>
-					
+
 					<div class="aligncenter">
 					                   <input type="submit" value="submit">
 <!-- 						<button type="button" class="btn btnsm btn-primary" onClick="getDLHash()">Add Driving Licence</button> -->
@@ -191,7 +190,7 @@ function getDLHash()
 	<br>
 </div>
 
-<input type="hidden" id="hdnContractABI" name="hdnContractABI" value="[{'constant':true,'inputs':[{'name':'UserAddress','type':'address'},{'name':'RequestIndex','type':'uint256'}],'name':'ViewDLRequestDetail','outputs':[{'name':'RequestedBy','type':'string'},{'name':'DL_No','type':'uint256'},{'name':'DL_Name','type':'uint256'},{'name':'DL_DOB','type':'uint256'},{'name':'DL_Hash','type':'uint256'},{'name':'DL_Address','type':'uint256'},{'name':'DL_OverAll_Status','type':'uint256'}],'payable':false,'stateMutability':'view','type':'function'},{'constant':false,'inputs':[{'name':'UserAddress','type':'address'},{'name':'FullName','type':'string'},{'name':'EmailID','type':'string'},{'name':'MobileNo','type':'uint256'}],'name':'AddUser','outputs':[],'payable':false,'stateMutability':'nonpayable','type':'function'},{'constant':true,'inputs':[{'name':'UserAddress','type':'address'}],'name':'ViewDLRequestLength','outputs':[{'name':'','type':'uint256'}],'payable':false,'stateMutability':'view','type':'function'},{'constant':false,'inputs':[{'name':'UserAddress','type':'address'},{'name':'DL_No','type':'string'},{'name':'DL_Name','type':'string'},{'name':'DL_DOB','type':'string'},{'name':'DL_Hash','type':'bytes'},{'name':'DL_Address','type':'string'}],'name':'AddUserDL','outputs':[],'payable':false,'stateMutability':'nonpayable','type':'function'},{'constant':true,'inputs':[{'name':'UserAddress','type':'address'},{'name':'RequestIndex','type':'uint256'}],'name':'viewUserDL','outputs':[{'name':'DL_No_S','type':'uint256'},{'name':'DL_No_V','type':'string'},{'name':'DL_Name_S','type':'uint256'},{'name':'DL_Name_V','type':'string'},{'name':'DL_DOB_S','type':'uint256'},{'name':'DL_DOB_V','type':'string'},{'name':'DL_Hash_S','type':'uint256'},{'name':'DL_Hash_V','type':'bytes'},{'name':'DL_Address_S','type':'uint256'},{'name':'DL_Address_V','type':'string'}],'payable':false,'stateMutability':'view','type':'function'},{'constant':true,'inputs':[{'name':'UserAddress','type':'address'},{'name':'RequestIndex','type':'uint256'}],'name':'ViewDLRequestHeader','outputs':[{'name':'RequestedBy','type':'string'},{'name':'DL_OverAll_Status','type':'uint256'}],'payable':false,'stateMutability':'view','type':'function'},{'constant':true,'inputs':[{'name':'UserAddress','type':'address'},{'name':'UserIndex','type':'uint256'}],'name':'viewUser','outputs':[{'name':'FullName','type':'string'},{'name':'EmailID','type':'string'},{'name':'MobileNo','type':'uint256'}],'payable':false,'stateMutability':'view','type':'function'},{'constant':false,'inputs':[{'name':'UserAddress','type':'address'},{'name':'RequestIndex','type':'uint256'},{'name':'DL_No','type':'uint256'},{'name':'DL_Name','type':'uint256'},{'name':'DL_DOB','type':'uint256'},{'name':'DL_Hash','type':'uint256'},{'name':'DL_Address','type':'uint256'},{'name':'DL_OverAll_Status','type':'uint256'}],'name':'UpdateRequestStatus','outputs':[],'payable':false,'stateMutability':'nonpayable','type':'function'},{'constant':false,'inputs':[{'name':'UserAddress','type':'address'},{'name':'RequestedBy','type':'string'},{'name':'DL_No','type':'uint256'},{'name':'DL_Name','type':'uint256'},{'name':'DL_DOB','type':'uint256'},{'name':'DL_Hash','type':'uint256'},{'name':'DL_Address','type':'uint256'},{'name':'DL_OverAll_Status','type':'uint256'}],'name':'AddDLRequest','outputs':[],'payable':false,'stateMutability':'nonpayable','type':'function'},{'inputs':[],'payable':false,'stateMutability':'nonpayable','type':'constructor'}]">
+<input type="hidden" id="hdnContractABI" name="hdnContractABI" value='[ { "constant": false, "inputs": [ { "name": "UserAddress", "type": "address" }, { "name": "RequestedBy", "type": "string" }, { "name": "DL_No", "type": "uint256" }, { "name": "DL_Name", "type": "uint256" }, { "name": "DL_DOB", "type": "uint256" }, { "name": "DL_Hash", "type": "uint256" }, { "name": "DL_Address", "type": "uint256" }, { "name": "DL_OverAll_Status", "type": "uint256" } ], "name": "AddDLRequest", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "UserAddress", "type": "address" }, { "name": "FullName", "type": "string" }, { "name": "EmailID", "type": "string" }, { "name": "MobileNo", "type": "uint256" } ], "name": "AddUser", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "UserAddress", "type": "address" }, { "name": "DL_No", "type": "string" }, { "name": "DL_Name", "type": "string" }, { "name": "DL_DOB", "type": "string" }, { "name": "DL_Hash", "type": "bytes" }, { "name": "DL_Address", "type": "string" } ], "name": "AddUserDL", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "UserAddress", "type": "address" }, { "name": "RequestIndex", "type": "uint256" }, { "name": "DL_No", "type": "uint256" }, { "name": "DL_Name", "type": "uint256" }, { "name": "DL_DOB", "type": "uint256" }, { "name": "DL_Hash", "type": "uint256" }, { "name": "DL_Address", "type": "uint256" }, { "name": "DL_OverAll_Status", "type": "uint256" } ], "name": "UpdateRequestStatus", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "payable": false, "stateMutability": "nonpayable", "type": "constructor" }, { "constant": true, "inputs": [ { "name": "UserAddress", "type": "address" }, { "name": "RequestIndex", "type": "uint256" } ], "name": "ViewDLRequestDetail", "outputs": [ { "name": "RequestedBy", "type": "string" }, { "name": "DL_No", "type": "uint256" }, { "name": "DL_Name", "type": "uint256" }, { "name": "DL_DOB", "type": "uint256" }, { "name": "DL_Hash", "type": "uint256" }, { "name": "DL_Address", "type": "uint256" }, { "name": "DL_OverAll_Status", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "UserAddress", "type": "address" }, { "name": "RequestIndex", "type": "uint256" } ], "name": "ViewDLRequestHeader", "outputs": [ { "name": "RequestedBy", "type": "string" }, { "name": "DL_OverAll_Status", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "UserAddress", "type": "address" } ], "name": "ViewDLRequestLength", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "UserAddress", "type": "address" }, { "name": "UserIndex", "type": "uint256" } ], "name": "viewUser", "outputs": [ { "name": "FullName", "type": "string" }, { "name": "EmailID", "type": "string" }, { "name": "MobileNo", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "UserAddress", "type": "address" }, { "name": "RequestIndex", "type": "uint256" } ], "name": "viewUserDL", "outputs": [ { "name": "DL_No_S", "type": "uint256" }, { "name": "DL_No_V", "type": "string" }, { "name": "DL_Name_S", "type": "uint256" }, { "name": "DL_Name_V", "type": "string" }, { "name": "DL_DOB_S", "type": "uint256" }, { "name": "DL_DOB_V", "type": "string" }, { "name": "DL_Hash_S", "type": "uint256" }, { "name": "DL_Hash_V", "type": "bytes" }, { "name": "DL_Address_S", "type": "uint256" }, { "name": "DL_Address_V", "type": "string" } ], "payable": false, "stateMutability": "view", "type": "function" } ]'>
 
 </form>
 

@@ -59,29 +59,29 @@ function AddDLRequest()
 	var DL_Address = 0; 
 	var DL_OverAll_Status = 1; 
 	
-	if(document.getElementById("chk_DL_No").checked)
-	{
-		DL_No=1;
-	}
-
-	if(document.getElementById("chk_DL_Name").checked)
-	{
-		DL_Name=1;
-	}
-	
-	if(document.getElementById("chk_DL_DOB").checked)
-	{
-		DL_DOB=1;
-	}
-	
+// 	if(document.getElementById("chk_DL_No").checked)
+// 	{
+// 		DL_No=1;
+// 	}
+//
+// 	if(document.getElementById("chk_DL_Name").checked)
+// 	{
+// 		DL_Name=1;
+// 	}
+//
+// 	if(document.getElementById("chk_DL_DOB").checked)
+// 	{
+// 		DL_DOB=1;
+// 	}
+//
 	if(document.getElementById("chk_DL_Hash").checked)
 	{
 		DL_Hash=1;
 	}
 	
-	if(document.getElementById("chk_DL_Address").checked)
+	if(document.getElementById("chk_DL_DOB").checked)
 	{
-		DL_Address=1;
+		DL_DOB=1;
 	}
 	
 // 	MyContract.AddDLRequest.sendTransaction(UserAddress,RequestedBy,DL_No,DL_Name,DL_DOB,DL_Hash,DL_Address,DL_OverAll_Status,function(err, transactionHash) {
@@ -159,7 +159,7 @@ function AddDLRequest()
 						</tr>
 						<tr>
 							<td width="10%">
-								<input id="chk_DL_No" type="checkbox" name="chk_DL_No" value=""/>
+								<input id="chk_DL_Hash" type="checkbox" name="chk_DL_Hash" value=""/>
 							</td>
 							<td width="90%">
 								Medical Lab Reports

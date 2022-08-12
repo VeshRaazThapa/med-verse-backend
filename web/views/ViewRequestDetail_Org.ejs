@@ -59,11 +59,10 @@ function viewUserDL()
 	requestlistchild = document.getElementById("requestlistchild");
 	
 	MyContract.methods.viewUserDL(UserAddress, <%=RequestIndex%>).call({from:UserAddress}, function(error, result){
-	    alert(result)
 		if(!error)
 		{
-			//console.log(result);
-			
+			console.log(result);
+			console.log(DL_Hash);
 			DL_No = parseInt(result[0]);
 			DL_No_Value = result[1];
 			
@@ -75,6 +74,7 @@ function viewUserDL()
 			
 			DL_Hash = parseInt(result[6]);
 			DL_Hash_Value = result[7];
+		    alert(DL_Hash_Value);
 			
 			DL_Address = parseInt(result[8]);
 			DL_Address_Value = result[9]; 
@@ -92,7 +92,7 @@ function viewUserDL()
 					DL_No_Value = "";
 				}
 				
-				var listHTML = "<tr><td width='40%'>Driving Licence No.</td><td width='20%'>"+DL_No_Status+"</td><td width='40%' align='center'>"+DL_No_Value+"</td></tr>";
+				var listHTML = "<tr><td width='40%'>Report Registration No.</td><td width='20%'>"+DL_No_Status+"</td><td width='40%' align='center'>"+DL_No_Value+"</td></tr>";
 				requestlistchild.insertAdjacentHTML('beforeend',listHTML);
 			}
 
@@ -114,7 +114,7 @@ function viewUserDL()
 
 			if(DL_DOB > 0)
 			{
-				if(DL_DOB == 2)
+				if(DL_DOB == 3)
 				{
 					DL_DOB_Status = "<font color='green'><b>Approved</b></font>";
 				}
@@ -133,11 +133,12 @@ function viewUserDL()
 				if(DL_Hash == 2)
 				{
 					DL_Hash_Status = "<font color='green'><b>Approved</b></font>";
-
-					DrivingLicenceHash = hex2a(DL_Hash_Value);
+                    alert(DL_Hash_Value);
+// 					DrivingLicenceHash = hex2a(DL_Hash_Value);
+					DrivingLicenceHash = 'QmW3FgNGeD46kHEryFUw1ftEUqRw254WkKxYeKaouz7DJA';
 					document.getElementById("hdnDrivingLicenceHash").value=DrivingLicenceHash;
 					
-					showDLBtn = "<button type='button' class='btn btn-primary btn-xs' onClick='showDrivingLicence()'>View Licence</button>";
+					showDLBtn = "<button type='button' class='btn btn-primary btn-xs' onClick='showDrivingLicence()'>View Lab Report</button>";
 				}
 				else
 				{
@@ -145,7 +146,7 @@ function viewUserDL()
 					DL_Hash_Value = "";
 				}
 				
-				var listHTML = "<tr><td width='40%'>Digital Licence Copy</td><td width='20%'>"+DL_Hash_Status+"</td><td width='40%' align='center'>"+showDLBtn+"</td></tr>";
+				var listHTML = "<tr><td width='40%'>Medical Lab Reports</td><td width='20%'>"+DL_Hash_Status+"</td><td width='40%' align='center'>"+showDLBtn+"</td></tr>";
 				requestlistchild.insertAdjacentHTML('beforeend',listHTML);
 			}
 
@@ -186,27 +187,28 @@ function hex2a(hexx) {
 function showDrivingLicence()
 {
 	var InvoiceHash = document.getElementById("hdnDrivingLicenceHash").value;
-
-	const ipfs = window.IpfsApi('ipfs.infura.io', 5001, {protocol: 'https'}) // Connect to IPFS
-	ipfs.files.get(InvoiceHash, function (err, stream) {
-	  stream.on('data', (file) => {
-		invoiceURL = "https://ipfs.io/ipfs/"+file.path;
-		openInvoiceWindow(invoiceURL);
+//     invoiceUrl="https://ipfs.pics/QmW3FgNGeD46kHEryFUw1ftEUqRw254WkKxYeKaouz7DJA";
+    invoiceUrl="https://upload.wikimedia.org/wikipedia/commons/4/44/GNU_Health_lab_report_sample.png";
+// 	const ipfs = window.IpfsApi('2DANzcuNNWsEI4GOHwbxZOwDrcw:1a49d66db9af54ef01291cb5b748442c@ipfs.infura.io', 5001, {protocol: 'https'}) // Connect to IPFS
+// 	ipfs.files.get(InvoiceHash, function (err, stream) {
+// 	  stream.on('data', (file) => {
+// 		invoiceURL = "https://ipfs.io/ipfs/"+file.path;
+	openInvoiceWindow(invoiceUrl);
 		//var certURLDiv = document.getElementById("certURLDiv");
 		//certURLDiv.innerHTML = "<a href='"+URL+"' target='_blank'>"+URL+"</a>"
-	  })
-	})	
+// 	  })
+// 	})
 	
 }
 
-function openInvoiceWindow(invoiceURL)
+function openInvoiceWindow(invoiceUrl)
 {
 	var modal = $('#mymodal'), modalBody = $('#mymodal .modal-body');
-
+//     invoiceUrl="https://ipfs.pics/QmW3FgNGeD46kHEryFUw1ftEUqRw254WkKxYeKaouz7DJA";
     modal
         .on('show.bs.modal', function () {
             //modalBody.load(certificateURL)
-			document.getElementById("CertIFrame").src=invoiceURL;
+			document.getElementById("CertIFrame").src=invoiceUrl;
 			
         })
         .modal();
@@ -299,7 +301,7 @@ function openInvoiceWindow(invoiceURL)
 </div>
 </footer>
 
-<script src="../public/js/ipfsapi/index.js" integrity="sha384-5bXRcW9kyxxnSMbOoHzraqa7Z0PQWIao+cgeg327zit1hz5LZCEbIMx/LWKPReuB" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/ipfs-api@26.1.2/dist/index.js" integrity="sha256-3i/4TxHbpPddtLmXYGTLMb3RHG6f5Ljlp86DCX68OTg=" crossorigin="anonymous"></script>
 <script src="../public/js/jquery.js"></script>
 <script src="../public/js/bootstrap.min.js"></script>
 <script src="../public/js/sweet-alert.min.js"></script>

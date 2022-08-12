@@ -29,8 +29,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(fileUpload());
 
 // Deploy Smart Contract and place smart contract address here 
-var ContractAddress = "0x7BB73B7fEC4fcCC8d39274a21a9C8a52EfDF3C73";
-
+var ContractAddress = "0x8Bd40d2a04EFF82e3F111bbd9ea9261C2E8eec47";
 app.get('/', function (req, res) {
 	res.render('pages/dashboard');
 	// res.render("home")

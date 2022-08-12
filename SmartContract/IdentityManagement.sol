@@ -96,7 +96,7 @@ contract IdentityManagement
 
     function viewUserDL(address UserAddress, uint RequestIndex) constant returns(uint DL_No_S, string DL_No_V, uint DL_Name_S, string DL_Name_V, uint DL_DOB_S, string DL_DOB_V, uint DL_Hash_S, bytes DL_Hash_V, uint DL_Address_S, string DL_Address_V)
     {
-        UserDL ThisUserDL=UserDLMap[UserAddress][0];
+        UserDL ThisUserDL=UserDLMap[UserAddress][UserDLMap[UserAddress].length-1];
 		DLRequest ThisDLRequest=DLRequestMap[UserAddress][RequestIndex];
         return (ThisDLRequest.DL_No, ThisUserDL.DL_No, ThisDLRequest.DL_Name, ThisUserDL.DL_Name, ThisDLRequest.DL_DOB, ThisUserDL.DL_DOB, ThisDLRequest.DL_Hash, ThisUserDL.DL_Hash, ThisDLRequest.DL_Address, ThisUserDL.DL_Address);
     }

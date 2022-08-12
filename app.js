@@ -1,6 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var fileUpload = require('express-fileupload');
+var Web3 = require('web3');
 const fs = require('fs');
 var path = require('path');
 var app = express();
@@ -12,6 +13,7 @@ const ipfsClient = require('ipfs-http-client');
 const ipfs = new ipfsClient({host:'ipfs.infura.io',port:'5001',protocol:'https', headers: {
         authorization: auth,
     },});
+var fileHash='';
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'web/views'));
 app.use('/public', express.static(__dirname + '/web/public'));
@@ -48,25 +50,38 @@ app.get('/AddUserDL', function (req, res) {
 })
 
 app.post('/upload', function (req,res) {
+
 	const file = req.files.invoicefile;
 	console.log(req);
 	const fileName = req.files.invoicefile.name;
 	const filePath = '/Users/stuff/Desktop/Research/' + fileName;
-
 	file.mv(filePath,async (err) => {
 		if (err) {
 			console.log('Error: failed to download the file');
 			return res.status(500).send(err);
 		}
 
-		const fileHash = await addFile(fileName,filePath);
+		fileHash = await addFile(fileName,filePath);
 
 		fs.unlink(filePath, (err) => {
 			if (err) console.log(err);
 		});
-		res.render('upload',{fileName,fileHash});
+
+		// var DL_Hash=fileHash;
+	console.log(fileHash,'----------');
+	// var MyContract = new Web3.eth.Contract(ABIJSON,ContractAddress);
+	var DL_No = req.body.txtLicenceNo;
+	var DL_Name = req.body.txtFullName;
+	var DL_DOB = req.body.txtDOB;
+	var DL_Address = req.body.txtAddress;
+
+	var data = {ContractAddress:ContractAddress,DLHash:fileHash,DL_No:DL_No,DL_Name:DL_Name,DL_DOB:DL_DOB,DL_Address:DL_Address,fileName:fileName};
+	res.render("upload",data);
+	// res.render('upload',{ContractAddress:ContractAddress,fileName,fileHash,ABIJSON,DL_No,DL_Name,DL_DOB,DL_Address});
+
 
 	});
+
 	});
 
 const addFile = async (fileName, filePath) => {

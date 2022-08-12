@@ -34,8 +34,12 @@ app.get('/', function (req, res) {
 	res.render('pages/dashboard');
 	// res.render("home")
 })
-app.get('/old', function (req, res) {
-	res.render("index")
+app.get('/doctor-dashboard', function (req, res) {
+	res.render("index");
+})
+app.get('/patient-demo', function (req, res) {
+	var data = {ContractAddress:ContractAddress};
+	res.render("patientDemo",data);
 })
 
 app.get('/AddUser', function (req, res) {

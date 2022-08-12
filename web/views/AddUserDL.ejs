@@ -40,7 +40,7 @@ window.addEventListener('load', async () => {
 
 function AddUserDL()
 {
-    alert('calling the add user dl')
+//     alert('calling the add user dl')
 	var ABIString = document.getElementById("hdnContractABI").value; 
 	ABIString = ABIString.replace(/'/g , "\"");
 	ABIJSON = JSON.parse(ABIString);
@@ -176,7 +176,7 @@ function getDLHash()
 						<textarea class="form-control" rows="4" name="txtAddress" id="txtAddress" placeholder="Address here ..."></textarea>
 					</div>
 					<div class="form-group">
-						<label class="control-label" for="txtFinanceAmount">Attach Driving Licence</label>
+						<label class="control-label" for="txtFinanceAmount">Attach Lab Report</label>
 						<input type="file" name="invoicefile" id="invoicefile">
 					</div>
 					

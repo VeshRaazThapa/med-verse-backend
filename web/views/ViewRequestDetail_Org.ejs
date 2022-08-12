@@ -1,310 +1,345 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="">
-<meta name="author" content="">
-<title>MedVerse</title>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>MedVerse</title>
 
-<link rel="stylesheet" href="../public/css/bootstrap.min.css" type="text/css">
-<link rel="stylesheet" href="../public/css/style.css" type="text/css">
-<link rel="stylesheet" href="../public/css/sweet-alert.css" type="text/css">
-<link rel="stylesheet" href="../public/css/style_bank.css" type="text/css">
-<script src="../public/js/web3.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="../public/css/bootstrap.min.css"
+      type="text/css"
+    />
+    <link rel="stylesheet" href="../public/css/style.css" type="text/css" />
+    <link
+      rel="stylesheet"
+      href="../public/css/sweet-alert.css"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      href="../public/css/style_bank.css"
+      type="text/css"
+    />
+    <script src="../public/js/web3.min.js"></script>
 
-<script>
+    <script>
 
-var UserAddress="";
+      var UserAddress="";
 
-var DL_No = 0;
-var DL_Name = 0;
-var DL_DOB = 0;
-var DL_Hash = 0;
-var DL_Address = 0;
+      var DL_No = 0;
+      var DL_Name = 0;
+      var DL_DOB = 0;
+      var DL_Hash = 0;
+      var DL_Address = 0;
 
-window.addEventListener('load', async () => {
-    if (window.ethereum) {
-        window.web3 = new Web3(ethereum);
-        try {
-        			 await ethereum.enable();
-             window.ethereum.enable().then(function(acc){
-        UserAddress = acc[0];
-        console.log(UserAddress);
-        viewUserDL();
+      window.addEventListener('load', async () => {
+          if (window.ethereum) {
+              window.web3 = new Web3(ethereum);
+              try {
+              			 await ethereum.enable();
+                   window.ethereum.enable().then(function(acc){
+              UserAddress = acc[0];
+              console.log(UserAddress);
+              viewUserDL();
 
-//         $("#accountAddress").html("Your Account: " + App.account);
-    });
-        } catch (error) {
-            alert("User denied account access...");
-        }
-    }
-    else if (window.web3) {
-        window.web3 = new Web3(web3.currentProvider);
-		UserAddress=web3.eth.coinbase;
-		viewUserDL();
-    }
-    else {
-        alert('Non-Ethereum browser detected. You should consider trying MetaMask!');
-    }
-});
+      //         $("#accountAddress").html("Your Account: " + App.account);
+          });
+              } catch (error) {
+                  alert("User denied account access...");
+              }
+          }
+          else if (window.web3) {
+              window.web3 = new Web3(web3.currentProvider);
+      		UserAddress=web3.eth.coinbase;
+      		viewUserDL();
+          }
+          else {
+              alert('Non-Ethereum browser detected. You should consider trying MetaMask!');
+          }
+      });
 
-function viewUserDL()
-{
-	var ABIString = document.getElementById("hdnContractABI").value; 
-	ABIString = ABIString.replace(/'/g , "\"");
-	ABIJSON = JSON.parse(ABIString);
-	MyContract = new web3.eth.Contract(ABIJSON,"<%=ContractAddress%>");
-	
-	requestlistchild = document.getElementById("requestlistchild");
-	
-	MyContract.methods.viewUserDL(UserAddress, <%=RequestIndex%>).call({from:UserAddress}, function(error, result){
-		if(!error)
-		{
-			console.log(result);
-			console.log(DL_Hash);
-			DL_No = parseInt(result[0]);
-			DL_No_Value = result[1];
-			
-			DL_Name = parseInt(result[2]);
-			DL_Name_Value = result[3];
-			
-			DL_DOB = parseInt(result[4]);
-			DL_DOB_Value = result[5];
-			
-			DL_Hash = parseInt(result[6]);
-			DL_Hash_Value = result[7];
-		    alert(DL_Hash_Value);
-			
-			DL_Address = parseInt(result[8]);
-			DL_Address_Value = result[9]; 
+      function viewUserDL()
+      {
+      	var ABIString = document.getElementById("hdnContractABI").value;
+      	ABIString = ABIString.replace(/'/g , "\"");
+      	ABIJSON = JSON.parse(ABIString);
+      	MyContract = new web3.eth.Contract(ABIJSON,"<%=ContractAddress%>");
 
-		
-			if(DL_No > 0)
-			{
-				if(DL_No == 2)
-				{
-					DL_No_Status = "<font color='green'><b>Approved</b></font>";
-				}
-				else
-				{
-					DL_No_Status = "Rejected";
-					DL_No_Value = "";
-				}
-				
-				var listHTML = "<tr><td width='40%'>Report Registration No.</td><td width='20%'>"+DL_No_Status+"</td><td width='40%' align='center'>"+DL_No_Value+"</td></tr>";
-				requestlistchild.insertAdjacentHTML('beforeend',listHTML);
-			}
+      	requestlistchild = document.getElementById("requestlistchild");
 
-			if(DL_Name > 0)
-			{
-				if(DL_Name == 2)
-				{
-					DL_Name_Status = "<font color='green'><b>Approved</b></font>";
-				}
-				else
-				{
-					DL_Name_Status = "<font color='red'><b>Rejected</b></font>";
-					DL_Name_Value = "";
-				}
-				
-				var listHTML = "<tr><td width='40%'>Name as per Driving Licence</td><td width='20%'>"+DL_Name_Status+"</td><td width='40%' align='center'>"+DL_Name_Value+"</td></tr>";
-				requestlistchild.insertAdjacentHTML('beforeend',listHTML);
-			}
+      	MyContract.methods.viewUserDL(UserAddress, <%=RequestIndex%>).call({from:UserAddress}, function(error, result){
+      		if(!error)
+      		{
+      			console.log(result);
+      			console.log(DL_Hash);
+      			DL_No = parseInt(result[0]);
+      			DL_No_Value = result[1];
 
-			if(DL_DOB > 0)
-			{
-				if(DL_DOB == 3)
-				{
-					DL_DOB_Status = "<font color='green'><b>Approved</b></font>";
-				}
-				else
-				{
-					DL_DOB_Status = "<font color='red'><b>Rejected</b></font>";
-					DL_DOB_Value = "";
-				}
-				
-				var listHTML = "<tr><td width='40%'>Date Of Birth as per Driving Licence</td><td width='20%'>"+DL_DOB_Status+"</td><td width='40%' align='center'>"+DL_DOB_Value+"</td></tr>";
-				requestlistchild.insertAdjacentHTML('beforeend',listHTML);
-			}
-			
-			if(DL_Hash > 0)
-			{
-				if(DL_Hash == 2)
-				{
-					DL_Hash_Status = "<font color='green'><b>Approved</b></font>";
-                    alert(DL_Hash_Value);
-// 					DrivingLicenceHash = hex2a(DL_Hash_Value);
-					DrivingLicenceHash = 'QmW3FgNGeD46kHEryFUw1ftEUqRw254WkKxYeKaouz7DJA';
-					document.getElementById("hdnDrivingLicenceHash").value=DrivingLicenceHash;
-					
-					showDLBtn = "<button type='button' class='btn btn-primary btn-xs' onClick='showDrivingLicence()'>View Lab Report</button>";
-				}
-				else
-				{
-					DL_Hash_Status = "<font color='red'><b>Rejected</b></font>";
-					DL_Hash_Value = "";
-				}
-				
-				var listHTML = "<tr><td width='40%'>Medical Lab Reports</td><td width='20%'>"+DL_Hash_Status+"</td><td width='40%' align='center'>"+showDLBtn+"</td></tr>";
-				requestlistchild.insertAdjacentHTML('beforeend',listHTML);
-			}
+      			DL_Name = parseInt(result[2]);
+      			DL_Name_Value = result[3];
 
-			if(DL_Address > 0)
-			{
-				if(DL_Address == 2)
-				{
-					DL_Address_Status = "<font color='green'><b>Approved</b></font>";
-				}
-				else
-				{
-					DL_Address_Status = "<font color='red'><b>Rejected</b></font>";
-					DL_Address_Value = "";
-				}
-				
-				var listHTML = "<tr><td width='40%'>Address as per Driving Licence</td><td width='20%'>"+DL_Address_Status+"</td><td width='40%' align='center'>"+DL_Address_Value+"</td></tr>";
-				requestlistchild.insertAdjacentHTML('beforeend',listHTML);
-			}
-			
-			
-		}
-		else
-		{
-			swal(error);
-		}
-	})
-}
+      			DL_DOB = parseInt(result[4]);
+      			DL_DOB_Value = result[5];
 
-function hex2a(hexx) {
-	var hex = hexx.substring(2,hexx.length)
-    hex = hex.toString();//force conversion
-    var str = '';
-    for (var i = 0; i < hex.length; i += 2)
-        str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
-    return str;
-}
+      			DL_Hash = parseInt(result[6]);
+      			DL_Hash_Value = result[7];
+      		    alert(DL_Hash_Value);
 
-function showDrivingLicence()
-{
-	var InvoiceHash = document.getElementById("hdnDrivingLicenceHash").value;
-//     invoiceUrl="https://ipfs.pics/QmW3FgNGeD46kHEryFUw1ftEUqRw254WkKxYeKaouz7DJA";
-    invoiceUrl="https://upload.wikimedia.org/wikipedia/commons/4/44/GNU_Health_lab_report_sample.png";
-// 	const ipfs = window.IpfsApi('2DANzcuNNWsEI4GOHwbxZOwDrcw:1a49d66db9af54ef01291cb5b748442c@ipfs.infura.io', 5001, {protocol: 'https'}) // Connect to IPFS
-// 	ipfs.files.get(InvoiceHash, function (err, stream) {
-// 	  stream.on('data', (file) => {
-// 		invoiceURL = "https://ipfs.io/ipfs/"+file.path;
-	openInvoiceWindow(invoiceUrl);
-		//var certURLDiv = document.getElementById("certURLDiv");
-		//certURLDiv.innerHTML = "<a href='"+URL+"' target='_blank'>"+URL+"</a>"
-// 	  })
-// 	})
-	
-}
+      			DL_Address = parseInt(result[8]);
+      			DL_Address_Value = result[9];
 
-function openInvoiceWindow(invoiceUrl)
-{
-	var modal = $('#mymodal'), modalBody = $('#mymodal .modal-body');
-//     invoiceUrl="https://ipfs.pics/QmW3FgNGeD46kHEryFUw1ftEUqRw254WkKxYeKaouz7DJA";
-    modal
-        .on('show.bs.modal', function () {
-            //modalBody.load(certificateURL)
-			document.getElementById("CertIFrame").src=invoiceUrl;
-			
-        })
-        .modal();
-}
 
-</script>
+      			if(DL_No > 0)
+      			{
+      				if(DL_No == 2)
+      				{
+      					DL_No_Status = "<font color='green'><b>Approved</b></font>";
+      				}
+      				else
+      				{
+      					DL_No_Status = "Rejected";
+      					DL_No_Value = "";
+      				}
 
-</head>
-<body id="page-top">
-<nav id="mainNav" class="navbar navbar-default navbar-fixed-top">
-<div class="container">
-	<!-- Brand and toggle get grouped for better mobile display -->
-	<div class="navbar-header">
-		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-		<span class="sr-only">Toggle navigation</span>
-		<span class="icon-bar"></span>
-		<span class="icon-bar"></span>
-		<span class="icon-bar"></span>
-		</button>
-		<img src="../public/img/logo.png">
-	</div>
-	
-	<!-- Collect the nav links, forms, and other content for toggling -->
-	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-		<ul class="nav navbar-nav navbar-right">
-			<li>
-				<a class="page-scroll" href="/">Home</a>
-			</li>
-		</ul>
-	</div>
-	<!-- /.navbar-collapse -->
-	
-</div>
-<!-- /.container -->
-</nav>
+      				var listHTML = "<tr><td width='40%'>Report Registration No.</td><td width='20%'>"+DL_No_Status+"</td><td width='40%' align='center'>"+DL_No_Value+"</td></tr>";
+      				requestlistchild.insertAdjacentHTML('beforeend',listHTML);
+      			}
 
-<form name="IntelitixForm" method="post" action="pubcert.asp">
-<div class="container container_body">
-	<div class="row">
-		<div class="col-md-7 center-block">
-			<div class="panel panel-info">
-				<div class="panel-heading">
-					<h3 class="panel-title">View Requested Data</h3>
-				</div>
-				<div class="panel-body">
-					<table class="table table-bordered" id="requestlistparent">
-						<tr>
-							<td width="40" align="center"><b>Institution Name</b></td>
-							<td width="40" align="center"><b><%=InstitutionName%></b></td>
-						</tr>
-					</table>
-					
-					<table class="table table-bordered" id="requestlistchild">
-						<tr>
-							<td colspan="3" align="center"><b>Requested Access</b></td>
-						</tr>
-					</table>
-					
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+      			if(DL_Name > 0)
+      			{
+      				if(DL_Name == 2)
+      				{
+      					DL_Name_Status = "<font color='green'><b>Approved</b></font>";
+      				}
+      				else
+      				{
+      					DL_Name_Status = "<font color='red'><b>Rejected</b></font>";
+      					DL_Name_Value = "";
+      				}
 
-<input type="hidden" id="hdnDrivingLicenceHash" name="hdnDrivingLicenceHash" value="">
-<input type="hidden" id="hdnContractABI" name="hdnContractABI" value="[{'constant':true,'inputs':[{'name':'UserAddress','type':'address'},{'name':'RequestIndex','type':'uint256'}],'name':'ViewDLRequestDetail','outputs':[{'name':'RequestedBy','type':'string'},{'name':'DL_No','type':'uint256'},{'name':'DL_Name','type':'uint256'},{'name':'DL_DOB','type':'uint256'},{'name':'DL_Hash','type':'uint256'},{'name':'DL_Address','type':'uint256'},{'name':'DL_OverAll_Status','type':'uint256'}],'payable':false,'stateMutability':'view','type':'function'},{'constant':false,'inputs':[{'name':'UserAddress','type':'address'},{'name':'FullName','type':'string'},{'name':'EmailID','type':'string'},{'name':'MobileNo','type':'uint256'}],'name':'AddUser','outputs':[],'payable':false,'stateMutability':'nonpayable','type':'function'},{'constant':true,'inputs':[{'name':'UserAddress','type':'address'}],'name':'ViewDLRequestLength','outputs':[{'name':'','type':'uint256'}],'payable':false,'stateMutability':'view','type':'function'},{'constant':false,'inputs':[{'name':'UserAddress','type':'address'},{'name':'DL_No','type':'string'},{'name':'DL_Name','type':'string'},{'name':'DL_DOB','type':'string'},{'name':'DL_Hash','type':'bytes'},{'name':'DL_Address','type':'string'}],'name':'AddUserDL','outputs':[],'payable':false,'stateMutability':'nonpayable','type':'function'},{'constant':true,'inputs':[{'name':'UserAddress','type':'address'},{'name':'RequestIndex','type':'uint256'}],'name':'viewUserDL','outputs':[{'name':'DL_No_S','type':'uint256'},{'name':'DL_No_V','type':'string'},{'name':'DL_Name_S','type':'uint256'},{'name':'DL_Name_V','type':'string'},{'name':'DL_DOB_S','type':'uint256'},{'name':'DL_DOB_V','type':'string'},{'name':'DL_Hash_S','type':'uint256'},{'name':'DL_Hash_V','type':'bytes'},{'name':'DL_Address_S','type':'uint256'},{'name':'DL_Address_V','type':'string'}],'payable':false,'stateMutability':'view','type':'function'},{'constant':true,'inputs':[{'name':'UserAddress','type':'address'},{'name':'RequestIndex','type':'uint256'}],'name':'ViewDLRequestHeader','outputs':[{'name':'RequestedBy','type':'string'},{'name':'DL_OverAll_Status','type':'uint256'}],'payable':false,'stateMutability':'view','type':'function'},{'constant':true,'inputs':[{'name':'UserAddress','type':'address'},{'name':'UserIndex','type':'uint256'}],'name':'viewUser','outputs':[{'name':'FullName','type':'string'},{'name':'EmailID','type':'string'},{'name':'MobileNo','type':'uint256'}],'payable':false,'stateMutability':'view','type':'function'},{'constant':false,'inputs':[{'name':'UserAddress','type':'address'},{'name':'RequestIndex','type':'uint256'},{'name':'DL_No','type':'uint256'},{'name':'DL_Name','type':'uint256'},{'name':'DL_DOB','type':'uint256'},{'name':'DL_Hash','type':'uint256'},{'name':'DL_Address','type':'uint256'},{'name':'DL_OverAll_Status','type':'uint256'}],'name':'UpdateRequestStatus','outputs':[],'payable':false,'stateMutability':'nonpayable','type':'function'},{'constant':false,'inputs':[{'name':'UserAddress','type':'address'},{'name':'RequestedBy','type':'string'},{'name':'DL_No','type':'uint256'},{'name':'DL_Name','type':'uint256'},{'name':'DL_DOB','type':'uint256'},{'name':'DL_Hash','type':'uint256'},{'name':'DL_Address','type':'uint256'},{'name':'DL_OverAll_Status','type':'uint256'}],'name':'AddDLRequest','outputs':[],'payable':false,'stateMutability':'nonpayable','type':'function'},{'inputs':[],'payable':false,'stateMutability':'nonpayable','type':'constructor'}]">
+      				var listHTML = "<tr><td width='40%'>Name as per Driving Licence</td><td width='20%'>"+DL_Name_Status+"</td><td width='40%' align='center'>"+DL_Name_Value+"</td></tr>";
+      				requestlistchild.insertAdjacentHTML('beforeend',listHTML);
+      			}
 
-</form>
+      			if(DL_DOB > 0)
+      			{
+      				if(DL_DOB == 3)
+      				{
+      					DL_DOB_Status = "<font color='green'><b>Approved</b></font>";
+      				}
+      				else
+      				{
+      					DL_DOB_Status = "<font color='red'><b>Rejected</b></font>";
+      					DL_DOB_Value = "";
+      				}
 
-<div class='modal fade' id='mymodal'>
-    <div class='modal-dialog modal-lg'>
-      <div class='modal-content'>
-        <div class='modal-body'><iframe id="CertIFrame" src="" width="100%" height="500" frameborder="0"></iframe></div>
-        <div class='modal-footer'>
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      				var listHTML = "<tr><td width='40%'>Date Of Birth as per Driving Licence</td><td width='20%'>"+DL_DOB_Status+"</td><td width='40%' align='center'>"+DL_DOB_Value+"</td></tr>";
+      				requestlistchild.insertAdjacentHTML('beforeend',listHTML);
+      			}
+
+      			if(DL_Hash > 0)
+      			{
+      				if(DL_Hash == 2)
+      				{
+      					DL_Hash_Status = "<font color='green'><b>Approved</b></font>";
+                          alert(DL_Hash_Value);
+      // 					DrivingLicenceHash = hex2a(DL_Hash_Value);
+      					DrivingLicenceHash = 'QmW3FgNGeD46kHEryFUw1ftEUqRw254WkKxYeKaouz7DJA';
+      					document.getElementById("hdnDrivingLicenceHash").value=DrivingLicenceHash;
+
+      					showDLBtn = "<button type='button' class='btn btn-primary btn-xs' onClick='showDrivingLicence()'>View Lab Report</button>";
+      				}
+      				else
+      				{
+      					DL_Hash_Status = "<font color='red'><b>Rejected</b></font>";
+      					DL_Hash_Value = "";
+      				}
+
+      				var listHTML = "<tr><td width='40%'>Medical Lab Reports</td><td width='20%'>"+DL_Hash_Status+"</td><td width='40%' align='center'>"+showDLBtn+"</td></tr>";
+      				requestlistchild.insertAdjacentHTML('beforeend',listHTML);
+      			}
+
+      			if(DL_Address > 0)
+      			{
+      				if(DL_Address == 2)
+      				{
+      					DL_Address_Status = "<font color='green'><b>Approved</b></font>";
+      				}
+      				else
+      				{
+      					DL_Address_Status = "<font color='red'><b>Rejected</b></font>";
+      					DL_Address_Value = "";
+      				}
+
+      				var listHTML = "<tr><td width='40%'>Address as per Driving Licence</td><td width='20%'>"+DL_Address_Status+"</td><td width='40%' align='center'>"+DL_Address_Value+"</td></tr>";
+      				requestlistchild.insertAdjacentHTML('beforeend',listHTML);
+      			}
+
+
+      		}
+      		else
+      		{
+      			swal(error);
+      		}
+      	})
+      }
+
+      function hex2a(hexx) {
+      	var hex = hexx.substring(2,hexx.length)
+          hex = hex.toString();//force conversion
+          var str = '';
+          for (var i = 0; i < hex.length; i += 2)
+              str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+          return str;
+      }
+
+      function showDrivingLicence()
+      {
+      	var InvoiceHash = document.getElementById("hdnDrivingLicenceHash").value;
+      //     invoiceUrl="https://ipfs.pics/QmW3FgNGeD46kHEryFUw1ftEUqRw254WkKxYeKaouz7DJA";
+          invoiceUrl="https://upload.wikimedia.org/wikipedia/commons/4/44/GNU_Health_lab_report_sample.png";
+      // 	const ipfs = window.IpfsApi('2DANzcuNNWsEI4GOHwbxZOwDrcw:1a49d66db9af54ef01291cb5b748442c@ipfs.infura.io', 5001, {protocol: 'https'}) // Connect to IPFS
+      // 	ipfs.files.get(InvoiceHash, function (err, stream) {
+      // 	  stream.on('data', (file) => {
+      // 		invoiceURL = "https://ipfs.io/ipfs/"+file.path;
+      	openInvoiceWindow(invoiceUrl);
+      		//var certURLDiv = document.getElementById("certURLDiv");
+      		//certURLDiv.innerHTML = "<a href='"+URL+"' target='_blank'>"+URL+"</a>"
+      // 	  })
+      // 	})
+
+      }
+
+      function openInvoiceWindow(invoiceUrl)
+      {
+      	var modal = $('#mymodal'), modalBody = $('#mymodal .modal-body');
+      //     invoiceUrl="https://ipfs.pics/QmW3FgNGeD46kHEryFUw1ftEUqRw254WkKxYeKaouz7DJA";
+          modal
+              .on('show.bs.modal', function () {
+                  //modalBody.load(certificateURL)
+      			document.getElementById("CertIFrame").src=invoiceUrl;
+
+              })
+              .modal();
+      }
+    </script>
+  </head>
+  <body id="page-top">
+    <nav id="mainNav" class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button
+            type="button"
+            class="navbar-toggle collapsed"
+            data-toggle="collapse"
+            data-target="#bs-example-navbar-collapse-1"
+          >
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <img src="../public/img/logo.png" />
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+              <a class="page-scroll" href="/">Home</a>
+            </li>
+          </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+      </div>
+      <!-- /.container -->
+    </nav>
+
+    <form name="IntelitixForm" method="post" action="pubcert.asp">
+      <div class="container container_body">
+        <div class="row">
+          <div class="col-md-7 center-block">
+            <div class="panel panel-info">
+              <div class="panel-heading">
+                <h3 class="panel-title">View Requested Data</h3>
+              </div>
+              <div class="panel-body">
+                <table class="table table-bordered" id="requestlistparent">
+                  <tr>
+                    <td width="40" align="center"><b>Institution Name</b></td>
+                    <td width="40" align="center">
+                      <b><%=InstitutionName%></b>
+                    </td>
+                  </tr>
+                </table>
+
+                <table class="table table-bordered" id="requestlistchild">
+                  <tr>
+                    <td colspan="3" align="center"><b>Requested Access</b></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <input
+        type="hidden"
+        id="hdnDrivingLicenceHash"
+        name="hdnDrivingLicenceHash"
+        value=""
+      />
+      <input
+        type="hidden"
+        id="hdnContractABI"
+        name="hdnContractABI"
+        value="[{'constant':true,'inputs':[{'name':'UserAddress','type':'address'},{'name':'RequestIndex','type':'uint256'}],'name':'ViewDLRequestDetail','outputs':[{'name':'RequestedBy','type':'string'},{'name':'DL_No','type':'uint256'},{'name':'DL_Name','type':'uint256'},{'name':'DL_DOB','type':'uint256'},{'name':'DL_Hash','type':'uint256'},{'name':'DL_Address','type':'uint256'},{'name':'DL_OverAll_Status','type':'uint256'}],'payable':false,'stateMutability':'view','type':'function'},{'constant':false,'inputs':[{'name':'UserAddress','type':'address'},{'name':'FullName','type':'string'},{'name':'EmailID','type':'string'},{'name':'MobileNo','type':'uint256'}],'name':'AddUser','outputs':[],'payable':false,'stateMutability':'nonpayable','type':'function'},{'constant':true,'inputs':[{'name':'UserAddress','type':'address'}],'name':'ViewDLRequestLength','outputs':[{'name':'','type':'uint256'}],'payable':false,'stateMutability':'view','type':'function'},{'constant':false,'inputs':[{'name':'UserAddress','type':'address'},{'name':'DL_No','type':'string'},{'name':'DL_Name','type':'string'},{'name':'DL_DOB','type':'string'},{'name':'DL_Hash','type':'bytes'},{'name':'DL_Address','type':'string'}],'name':'AddUserDL','outputs':[],'payable':false,'stateMutability':'nonpayable','type':'function'},{'constant':true,'inputs':[{'name':'UserAddress','type':'address'},{'name':'RequestIndex','type':'uint256'}],'name':'viewUserDL','outputs':[{'name':'DL_No_S','type':'uint256'},{'name':'DL_No_V','type':'string'},{'name':'DL_Name_S','type':'uint256'},{'name':'DL_Name_V','type':'string'},{'name':'DL_DOB_S','type':'uint256'},{'name':'DL_DOB_V','type':'string'},{'name':'DL_Hash_S','type':'uint256'},{'name':'DL_Hash_V','type':'bytes'},{'name':'DL_Address_S','type':'uint256'},{'name':'DL_Address_V','type':'string'}],'payable':false,'stateMutability':'view','type':'function'},{'constant':true,'inputs':[{'name':'UserAddress','type':'address'},{'name':'RequestIndex','type':'uint256'}],'name':'ViewDLRequestHeader','outputs':[{'name':'RequestedBy','type':'string'},{'name':'DL_OverAll_Status','type':'uint256'}],'payable':false,'stateMutability':'view','type':'function'},{'constant':true,'inputs':[{'name':'UserAddress','type':'address'},{'name':'UserIndex','type':'uint256'}],'name':'viewUser','outputs':[{'name':'FullName','type':'string'},{'name':'EmailID','type':'string'},{'name':'MobileNo','type':'uint256'}],'payable':false,'stateMutability':'view','type':'function'},{'constant':false,'inputs':[{'name':'UserAddress','type':'address'},{'name':'RequestIndex','type':'uint256'},{'name':'DL_No','type':'uint256'},{'name':'DL_Name','type':'uint256'},{'name':'DL_DOB','type':'uint256'},{'name':'DL_Hash','type':'uint256'},{'name':'DL_Address','type':'uint256'},{'name':'DL_OverAll_Status','type':'uint256'}],'name':'UpdateRequestStatus','outputs':[],'payable':false,'stateMutability':'nonpayable','type':'function'},{'constant':false,'inputs':[{'name':'UserAddress','type':'address'},{'name':'RequestedBy','type':'string'},{'name':'DL_No','type':'uint256'},{'name':'DL_Name','type':'uint256'},{'name':'DL_DOB','type':'uint256'},{'name':'DL_Hash','type':'uint256'},{'name':'DL_Address','type':'uint256'},{'name':'DL_OverAll_Status','type':'uint256'}],'name':'AddDLRequest','outputs':[],'payable':false,'stateMutability':'nonpayable','type':'function'},{'inputs':[],'payable':false,'stateMutability':'nonpayable','type':'constructor'}]"
+      />
+    </form>
+
+    <div class="modal fade" id="mymodal">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-body">
+            <iframe
+              id="CertIFrame"
+              src=""
+              width="100%"
+              height="500"
+              frameborder="0"
+            ></iframe>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+              Close
+            </button>
+          </div>
         </div>
       </div>
     </div>
-</div>
 
-<footer class="navbar-fixed-bottom">
-<div class="container">
-	<div class="row">
-		<div class="col-md-12 text-center">
-			<div class="footer-copyright">
-				&copy; 2019 1ID
-			</div>
-		</div>
-	</div>
-</div>
-</footer>
+    <footer class="navbar-fixed-bottom">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <div class="footer-copyright">&copy; 2022 MedVerse</div>
+          </div>
+        </div>
+      </div>
+    </footer>
 
-<script src="https://unpkg.com/ipfs-api@26.1.2/dist/index.js" integrity="sha256-3i/4TxHbpPddtLmXYGTLMb3RHG6f5Ljlp86DCX68OTg=" crossorigin="anonymous"></script>
-<script src="../public/js/jquery.js"></script>
-<script src="../public/js/bootstrap.min.js"></script>
-<script src="../public/js/sweet-alert.min.js"></script>
-
-</body>
+    <script
+      src="https://unpkg.com/ipfs-api@26.1.2/dist/index.js"
+      integrity="sha256-3i/4TxHbpPddtLmXYGTLMb3RHG6f5Ljlp86DCX68OTg="
+      crossorigin="anonymous"
+    ></script>
+    <script src="../public/js/jquery.js"></script>
+    <script src="../public/js/bootstrap.min.js"></script>
+    <script src="../public/js/sweet-alert.min.js"></script>
+  </body>
 </html>
